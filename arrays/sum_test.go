@@ -2,6 +2,7 @@ package arrays
 
 import (
 	"fmt"
+	"reflect"
 	"testing"
 )
 
@@ -11,6 +12,16 @@ func ExampleSum() {
 
 	fmt.Println(result)
 	// Output: 15
+}
+
+func ExampleSumAll() {
+	nums1 := []int{1, 2, 3}
+	nums2 := []int{2, 4, 6}
+
+	result := SumAll(nums1, nums2)
+	fmt.Println(result)
+
+	//Output: [6 12]
 }
 
 func TestSum(t *testing.T) {
@@ -25,6 +36,15 @@ func TestSum(t *testing.T) {
 	})
 }
 
+func TestSumAll(t *testing.T) {
+	got := SumAll([]int{1, 2}, []int{0, 9})
+	want := []int{3, 9}
+
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("got %v want %v", got, want)
+	}
+}
+
 func assertSum(t testing.TB, got int, want int, numbers []int) {
 	t.Helper()
 
@@ -32,3 +52,11 @@ func assertSum(t testing.TB, got int, want int, numbers []int) {
 		t.Errorf("got %d want %d given, %v", got, want, numbers)
 	}
 }
+
+// func assertSumAll(t testing.TB, got []int, want []int) {
+// 	t.Helper()
+
+// 	if !reflect.DeepEqual(got, want) {
+// 		t.Errorf("got %v want %v", got, want)
+// 	}
+// }
