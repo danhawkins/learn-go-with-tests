@@ -1,3 +1,3 @@
-module maths_example
+module clockface
 
 go 1.20
