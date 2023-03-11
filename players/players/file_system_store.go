@@ -3,16 +3,16 @@ package players
 import (
 	"encoding/json"
 	"io"
+	"log"
 )
 
 type FileSystemPlayerStore struct {
 	database io.ReadWriteSeeker
+	league   League
 }
 
 func (f *FileSystemPlayerStore) GetLeague() League {
-	f.database.Seek(0, 0)
-	league, _ := NewLeague(f.database)
-	return league
+	return f.league
 }
 
 func (f *FileSystemPlayerStore) GetPlayerScore(name string) int {
@@ -27,20 +27,25 @@ func (f *FileSystemPlayerStore) GetPlayerScore(name string) int {
 }
 
 func (f *FileSystemPlayerStore) RecordWin(name string) {
-	league := f.GetLeague()
-	player := league.Find(name)
+	player := f.league.Find(name)
+
+	log.Printf("Got league %v\n", f.league)
 
 	if player != nil {
 		player.Wins++
 	} else {
-		league = append(league, Player{name, 1})
+		f.league = append(f.league, Player{name, 1})
 	}
 
 	f.database.Seek(0, 0)
-	json.NewEncoder(f.database).Encode(league)
+	json.NewEncoder(f.database).Encode(f.league)
 }
 
 func NewFileSystemPlayerStore(db io.ReadWriteSeeker) *FileSystemPlayerStore {
-	store := &FileSystemPlayerStore{db}
-	return store
+	db.Seek(0, 0)
+	league, _ := NewLeague(db)
+	return &FileSystemPlayerStore{
+		database: db,
+		league:   league,
+	}
 }

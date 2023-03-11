@@ -13,6 +13,8 @@ const dbFileName = "game.db.json"
 const port = 5001
 
 func main() {
+	log.SetOutput(os.Stdout)
+
 	db, err := os.OpenFile(dbFileName, os.O_RDWR|os.O_CREATE, 0666)
 
 	if err != nil {
