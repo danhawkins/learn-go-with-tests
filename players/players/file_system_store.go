@@ -3,7 +3,6 @@ package players
 import (
 	"encoding/json"
 	"io"
-	"log"
 )
 
 type FileSystemPlayerStore struct {
@@ -29,8 +28,6 @@ func (f *FileSystemPlayerStore) GetPlayerScore(name string) int {
 func (f *FileSystemPlayerStore) RecordWin(name string) {
 	player := f.league.Find(name)
 
-	log.Printf("Got league %v\n", f.league)
-
 	if player != nil {
 		player.Wins++
 	} else {
@@ -44,6 +41,7 @@ func (f *FileSystemPlayerStore) RecordWin(name string) {
 func NewFileSystemPlayerStore(db io.ReadWriteSeeker) *FileSystemPlayerStore {
 	db.Seek(0, 0)
 	league, _ := NewLeague(db)
+
 	return &FileSystemPlayerStore{
 		database: db,
 		league:   league,
