@@ -3,17 +3,21 @@ package players
 import (
 	"encoding/json"
 	"fmt"
-	"io"
+	"log"
+	"os"
 )
 
 type League []Player
 
-func NewLeague(rdr io.Reader) ([]Player, error) {
+func NewLeague(rdr *os.File) ([]Player, error) {
 	var league League
 	err := json.NewDecoder(rdr).Decode(&league)
+
 	if err != nil {
 		err = fmt.Errorf("problem parsing league, %v", err)
 	}
+
+	log.Printf("Got league %v", league)
 
 	return league, err
 }
