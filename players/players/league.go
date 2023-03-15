@@ -3,13 +3,14 @@ package players
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
-	"os"
 )
 
 type League []Player
 
-func NewLeague(rdr *os.File) ([]Player, error) {
+func NewLeague(rdr io.Reader) (League, error) {
+
 	var league League
 	err := json.NewDecoder(rdr).Decode(&league)
 
