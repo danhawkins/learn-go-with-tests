@@ -1,6 +1,7 @@
 package players
 
 import (
+	"log"
 	"os"
 	"testing"
 )
@@ -13,18 +14,19 @@ func TestFileSystemStore(t *testing.T) {
 			{"Name": "Chris", "Wins": 33}]`)
 		defer cleanDatabase()
 
-		store := NewFileSystemPlayerStore(database)
+		store, _ := NewFileSystemPlayerStore(database)
+
+		got := store.GetLeague()
 
 		want := []Player{
 			{"Cleo", 10},
 			{"Chris", 33},
 		}
 
-		got := store.GetLeague()
 		assertLeague(t, got, want)
 
+		// read again
 		got = store.GetLeague()
-
 		assertLeague(t, got, want)
 	})
 
@@ -34,7 +36,7 @@ func TestFileSystemStore(t *testing.T) {
 			{"Name": "Chris", "Wins": 33}]`)
 		defer cleanDatabase()
 
-		store := NewFileSystemPlayerStore(database)
+		store, _ := NewFileSystemPlayerStore(database)
 
 		assertScoreEq(t, store.GetPlayerScore("Chris"), 33)
 		assertScoreEq(t, store.GetPlayerScore("Cleo"), 10)
@@ -46,7 +48,7 @@ func TestFileSystemStore(t *testing.T) {
 			{"Name": "Chris", "Wins": 33}]`)
 		defer cleanDatabase()
 
-		store := NewFileSystemPlayerStore(database)
+		store, _ := NewFileSystemPlayerStore(database)
 
 		store.RecordWin("Chris")
 
@@ -61,7 +63,7 @@ func TestFileSystemStore(t *testing.T) {
 			{"Name": "Chris", "Wins": 33}]`)
 		defer cleanDatabase()
 
-		store := NewFileSystemPlayerStore(database)
+		store, _ := NewFileSystemPlayerStore(database)
 
 		store.RecordWin("Pepper")
 
@@ -79,6 +81,8 @@ func createTempFile(t testing.TB, initialData string) (*os.File, func()) {
 	if err != nil {
 		t.Fatalf("could not create temp file %v", err)
 	}
+
+	log.Printf("Got initialData %v", initialData)
 
 	tmpfile.Write([]byte(initialData))
 
