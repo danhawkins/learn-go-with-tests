@@ -1,10 +1,9 @@
-package players
+package poker
 
 import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 )
 
 type League []Player
@@ -17,8 +16,6 @@ func NewLeague(rdr io.Reader) (League, error) {
 	if err != nil {
 		err = fmt.Errorf("problem parsing league, %v", err)
 	}
-
-	log.Printf("Got league %v", league)
 
 	return league, err
 }

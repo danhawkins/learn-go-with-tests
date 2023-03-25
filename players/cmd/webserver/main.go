@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/danhawkins/learn-go-with-tests/players/players"
+	"github.com/danhawkins/learn-go-with-tests/players/poker"
 )
 
 const dbFileName = "game.db.json"
@@ -21,8 +21,13 @@ func main() {
 		log.Fatalf("problem opening %s %v", dbFileName, err)
 	}
 
-	store, _ := players.NewFileSystemPlayerStore(db)
-	server := players.NewPlayerServer(store)
+	store, err := poker.NewFileSystemPlayerStore(db)
+
+	if err != nil {
+		log.Fatalf("problem creating file system player store, %v ", err)
+	}
+
+	server := poker.NewPlayerServer(store)
 
 	if err := http.ListenAndServe(fmt.Sprintf(":%d", port), server); err != nil {
 		log.Fatalf("could not listen on port %d %v", port, err)

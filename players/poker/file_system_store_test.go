@@ -1,7 +1,6 @@
-package players
+package poker
 
 import (
-	"log"
 	"os"
 	"testing"
 )
@@ -105,8 +104,6 @@ func createTempFile(t testing.TB, initialData string) (*os.File, func()) {
 	if err != nil {
 		t.Fatalf("could not create temp file %v", err)
 	}
-
-	log.Printf("Got initialData %v", initialData)
 
 	tmpfile.Write([]byte(initialData))
 

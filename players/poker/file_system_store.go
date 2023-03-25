@@ -1,4 +1,4 @@
-package players
+package poker
 
 import (
 	"encoding/json"
